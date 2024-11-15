@@ -1,8 +1,8 @@
 import { ArrowRight, CheckCircle } from "lucide-react";
-import Button from "./ui/Button";
 import { Link } from "react-router-dom";
+import Button from "../components/ui/Button";
 
-export default function WelcomePage() {
+function WelcomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
       <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
@@ -77,3 +77,5 @@ export default function WelcomePage() {
     </div>
   );
 }
+
+export default WelcomePage;
