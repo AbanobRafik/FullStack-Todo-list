@@ -91,12 +91,12 @@ const SignUp = () => {
             width="w-full"
             className="w-full bg-indigo-600 rounded-md hover:bg-indigo-800 transition duration-300 font-semibold"
           >
-            Login
+            SignUp
           </Button>
         </form>
 
         <p className="text-sm text-center text-gray-600">
-          already have account?{" "}
+          Already have account?{" "}
           <Link to="/login" className="text-indigo-600 hover:underline">
             log in
           </Link>
