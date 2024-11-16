@@ -10,7 +10,6 @@ import WelcomePage from "../pages/WelcomePage";
 import About from "../pages/About";
 import ProtectedRoutes from "../components/auth/ProtectedRoutes";
 
-// This should come from your authentication context or state management
 const isLoggedIn = false;
 const userData = isLoggedIn ? { email: "abanob@ex.com" } : null;
 

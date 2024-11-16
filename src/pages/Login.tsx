@@ -43,7 +43,13 @@ const Login = () => {
               })}
             />
 
-            {errors.email && <InputError>{errors.email.message}</InputError>}
+            {errors?.email && errors.email.type === "required" && (
+              <InputError>{errors.email.message}</InputError>
+            )}
+
+            {errors?.email && errors.email.type === "pattern" && (
+              <InputError>{errors.email.message}</InputError>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -61,7 +67,10 @@ const Login = () => {
                 },
               })}
             />
-            {errors.password && (
+            {errors?.password && errors.password.type === "required" && (
+              <InputError>{errors.password.message}</InputError>
+            )}
+            {errors?.password && errors.password.type === "minLength" && (
               <InputError>{errors.password.message}</InputError>
             )}
           </div>

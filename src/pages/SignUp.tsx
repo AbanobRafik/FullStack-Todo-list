@@ -38,15 +38,18 @@ const SignUp = () => {
               className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="John Doe"
               {...register("username", {
-                required: "Please enter a valid username",
+                required: "Username is required!",
                 minLength: {
                   value: 3,
                   message: "Username must be at least 3 characters",
                 },
               })}
             />
-            {errors.username && (
-              <InputError>{errors.username.message}</InputError>
+            {errors?.username && errors?.username.type === "required" && (
+              <InputError>{errors?.username.message}</InputError>
+            )}
+            {errors?.username && errors?.username.type === "minLength" && (
+              <InputError>{errors?.username.message}</InputError>
             )}
           </div>
           <div>
@@ -58,14 +61,19 @@ const SignUp = () => {
               className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="you@example.com"
               {...register("email", {
-                required: "Please enter a valid email",
+                required: "Please enter your email!",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.(com|net|org|edu|gov|io|co)$/i,
-                  message: "Enter a valid email",
+                  message: "Please enter a valid email",
                 },
               })}
             />
-            {errors.email && <InputError>{errors.email.message}</InputError>}
+            {errors?.email && errors.email.type === "required" && (
+              <InputError>{errors.email.message}</InputError>
+            )}
+            {errors?.email && errors.email.type === "pattern" && (
+              <InputError>{errors.email.message}</InputError>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -83,7 +91,10 @@ const SignUp = () => {
                 },
               })}
             />
-            {errors.password && (
+            {errors?.password && errors.password.type === "required" && (
+              <InputError>{errors.password.message}</InputError>
+            )}
+            {errors?.password && errors.password.type === "minLength" && (
               <InputError>{errors.password.message}</InputError>
             )}
           </div>
