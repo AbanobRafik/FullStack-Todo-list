@@ -1,18 +1,27 @@
-import { ReactNode } from "react";
+import { LoaderCircle } from "lucide-react";
+import { ReactNode, ButtonHTMLAttributes } from "react";
 
-interface Button {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   width?: "w-full" | "w-fit";
-  className: string;
+  className?: string;
   children: ReactNode;
+  isLoading?: boolean;
 }
 
-const Button = ({ width = "w-full", className, children, ...rest }: Button) => {
+const Button = ({
+  width = "w-full",
+  className = "",
+  children,
+  isLoading = false,
+  ...rest
+}: ButtonProps) => {
   return (
     <button
-      className={`${className} ${width} p-3 rounded-md text-white mt-1`}
+      className={`${className} ${width} p-3 rounded-md text-white mt-1 flex items-center justify-center`}
       {...rest}
+      disabled={isLoading}
     >
-      {children}
+      {isLoading ? <LoaderCircle className="animate-spin w-4 h-4" /> : children}
     </button>
   );
 };

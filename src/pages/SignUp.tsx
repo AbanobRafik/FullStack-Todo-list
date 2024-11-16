@@ -4,6 +4,11 @@ import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputError from "../components/ui/InputError";
 import { RegisterForm } from "../data/registerForm";
+import axiosInstance from "../config/axios.config";
+import toast, { Toaster } from "react-hot-toast";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import { IerrorResponse } from "../interfaces";
 
 type formField = {
   username: string;
@@ -18,9 +23,44 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<formField>();
 
+  // ** states
+  const [isLoading, setIsLoading] = useState(false);
+
   // ** Handlers
-  const onSubmit: SubmitHandler<formField> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<formField> = async (data) => {
+    setIsLoading(true);
+    try {
+      const { status } = await axiosInstance.post("/auth/local/register", data);
+      if (status === 200) {
+        toast.success(
+          "You registered successfully, You will navigate to login after 4 seconds",
+          {
+            duration: 4000,
+            position: "top-center",
+
+            style: {
+              backgroundColor: "green",
+              color: "white",
+            },
+
+            icon: "👏",
+          }
+        );
+      }
+    } catch (error) {
+      const errorobj = error as AxiosError<IerrorResponse>;
+      console.log(error);
+      toast.error(`${errorobj.response?.data.error.message}`, {
+        duration: 4000,
+        position: "top-center",
+        style: {
+          backgroundColor: "#800000",
+          color: "white",
+        },
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // ** Render
@@ -60,9 +100,10 @@ const SignUp = () => {
           {renderRegisterForm}
           <Button
             width="w-full"
-            className="w-full bg-indigo-600 rounded-md hover:bg-indigo-800 transition duration-300 font-semibold"
+            isLoading={isLoading}
+            className="w-full bg-indigo-600 flex disabled:hover:bg-indigo-400 disabled:cursor-not-allowed justify-center gap-2 items-center rounded-md hover:bg-indigo-800 transition duration-300 font-semibold"
           >
-            SignUp
+            Register
           </Button>
         </form>
 
@@ -73,6 +114,7 @@ const SignUp = () => {
           </Link>
         </p>
       </div>
+      <Toaster />
     </div>
   );
 };

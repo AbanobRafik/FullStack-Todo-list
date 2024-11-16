@@ -27,3 +27,9 @@ export interface Ilogin {
     };
   };
 }
+
+export interface IerrorResponse {
+  error: {
+    message?: string;
+  };
+}
