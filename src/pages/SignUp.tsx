@@ -1,6 +1,6 @@
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputError from "../components/ui/InputError";
 import { RegisterForm } from "../data/registerForm";
@@ -25,6 +25,7 @@ const SignUp = () => {
 
   // ** states
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   // ** Handlers
   const onSubmit: SubmitHandler<formField> = async (data) => {
@@ -33,19 +34,21 @@ const SignUp = () => {
       const { status } = await axiosInstance.post("/auth/local/register", data);
       if (status === 200) {
         toast.success(
-          "You registered successfully, You will navigate to login after 4 seconds",
+          "You registered successfully, You will navigate to login after 2 seconds",
           {
-            duration: 4000,
+            duration: 2000,
             position: "top-center",
 
             style: {
               backgroundColor: "green",
               color: "white",
             },
-
             icon: "👏",
           }
         );
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       }
     } catch (error) {
       const errorobj = error as AxiosError<IerrorResponse>;

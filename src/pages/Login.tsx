@@ -27,23 +27,29 @@ const Login = () => {
 
   // ** handlers
   const onSubmit: SubmitHandler<formField> = async (data) => {
-    console.log("Submitted Data:", data); // Debugging
     setIsLoading(true);
     try {
-      const { status } = await axiosInstance.post("/auth/local", data);
+      const { status, data: userData } = await axiosInstance.post(
+        "/auth/local",
+        data
+      );
       if (status === 200) {
         toast.success(
           "You login successfully, You will navigate to homepage after 4 seconds",
           {
-            duration: 4000,
+            duration: 2000,
             position: "top-center",
             style: { backgroundColor: "green", color: "white" },
             icon: "👏",
           }
         );
+        localStorage.setItem("logedinUser", JSON.stringify(userData));
+
+        setTimeout(() => {
+          location.replace("/")
+        }, 2000);
       }
     } catch (error) {
-      console.error("API Error:", error); // Debugging
       const errorobj = error as AxiosError<IerrorResponse>;
       toast.error(`${errorobj.response?.data.error.message}`, {
         duration: 4000,

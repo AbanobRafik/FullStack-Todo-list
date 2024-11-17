@@ -10,8 +10,11 @@ import WelcomePage from "../pages/WelcomePage";
 import About from "../pages/About";
 import ProtectedRoutes from "../components/auth/ProtectedRoutes";
 
-const isLoggedIn = false;
-const userData = isLoggedIn ? { email: "abanob@ex.com" } : null;
+const storageKey = "logedinUser";
+const userDataString = localStorage.getItem(storageKey);
+const userData = userDataString ? JSON.parse(userDataString) : null;
+
+console.log(userData);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +23,7 @@ const router = createBrowserRouter(
         index
         element={
           <ProtectedRoutes
-            isAllowed={isLoggedIn}
+            isAllowed={userData}
             redirectPath="/login"
             data={userData}
           >
@@ -32,7 +35,7 @@ const router = createBrowserRouter(
         path="about"
         element={
           <ProtectedRoutes
-            isAllowed={isLoggedIn}
+            isAllowed={userData}
             redirectPath="/login"
             data={userData}
           >
@@ -44,7 +47,7 @@ const router = createBrowserRouter(
         path="login"
         element={
           <ProtectedRoutes
-            isAllowed={!isLoggedIn}
+            isAllowed={!userData}
             redirectPath="/"
             data={userData}
           >
