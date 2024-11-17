@@ -4,9 +4,14 @@ import Input from "../components/ui/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputError from "../components/ui/InputError";
 import { loginForm } from "../data/loginForm";
+import { useState } from "react";
+import axiosInstance from "../config/axios.config";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
+import { IerrorResponse } from "../interfaces";
 
 type formField = {
-  email: string;
+  identifier: string;
   password: string;
 };
 
@@ -17,9 +22,37 @@ const Login = () => {
     formState: { errors },
   } = useForm<formField>();
 
+  // ** states
+  const [isLoading, setIsLoading] = useState(false);
+
   // ** handlers
-  const onSubmit: SubmitHandler<formField> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<formField> = async (data) => {
+    console.log("Submitted Data:", data); // Debugging
+    setIsLoading(true);
+    try {
+      const { status } = await axiosInstance.post("/auth/local", data);
+      if (status === 200) {
+        toast.success(
+          "You login successfully, You will navigate to homepage after 4 seconds",
+          {
+            duration: 4000,
+            position: "top-center",
+            style: { backgroundColor: "green", color: "white" },
+            icon: "👏",
+          }
+        );
+      }
+    } catch (error) {
+      console.error("API Error:", error); // Debugging
+      const errorobj = error as AxiosError<IerrorResponse>;
+      toast.error(`${errorobj.response?.data.error.message}`, {
+        duration: 4000,
+        position: "top-center",
+        style: { backgroundColor: "#800000", color: "white" },
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   //** renders
@@ -56,7 +89,8 @@ const Login = () => {
           {renderLoginForm}
           <Button
             width="w-full"
-            className="w-full bg-indigo-600 rounded-md hover:bg-indigo-800 transition duration-300 font-semibold"
+            isLoading={isLoading}
+            className="w-full bg-indigo-600 rounded-md  disabled:hover:bg-indigo-400 disabled:cursor-not-allowed hover:bg-indigo-800 transition duration-300 font-semibold"
           >
             Login
           </Button>

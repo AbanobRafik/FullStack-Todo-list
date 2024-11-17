@@ -8,11 +8,15 @@ export interface Iregister {
       value: number;
       message: string;
     };
+    pattern?: {
+      value: RegExp;
+      message: string;
+    };
   };
 }
 
 export interface Ilogin {
-  name: "email" | "password";
+  name: "identifier" | "password";
   placeholder: string;
   type: string;
   validation?: {

@@ -2,7 +2,7 @@ import { Ilogin } from "../interfaces";
 
 export const loginForm: Ilogin[] = [
   {
-    name: "email",
+    name: "identifier",
     placeholder: "email@email.com",
     type: "email",
     validation: {

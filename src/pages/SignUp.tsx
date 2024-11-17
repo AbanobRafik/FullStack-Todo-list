@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import InputError from "../components/ui/InputError";
 import { RegisterForm } from "../data/registerForm";
 import axiosInstance from "../config/axios.config";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import { IerrorResponse } from "../interfaces";
@@ -114,7 +114,6 @@ const SignUp = () => {
           </Link>
         </p>
       </div>
-      <Toaster />
     </div>
   );
 };
