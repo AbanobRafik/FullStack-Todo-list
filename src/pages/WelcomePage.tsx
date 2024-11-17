@@ -1,38 +1,31 @@
-import { ArrowRight, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
-import Button from "../components/ui/Button";
+import { CheckCircle } from "lucide-react";
 
-function WelcomePage() {
+export default function WelcomePage() {
+  const storageKey = "logedinUser";
+  const userDataString =
+    typeof window !== "undefined" ? localStorage.getItem(storageKey) : null;
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
       <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl w-full space-y-8 text-center">
           <div className="flex justify-center">
-            <CheckCircle className="h-12 w-12 text-blue-600" />
+            <CheckCircle
+              className="h-12 w-12 text-blue-600"
+              aria-hidden="true"
+            />
           </div>
-          <h1 className="text-4xl font-extrabold text-blue-700 sm:text-5xl md:text-6xl">
-            Welcome to ToDoze!
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-blue-700">
+            Welcome {userData?.user?.username || "User"}👋
           </h1>
-          <p className="mt-3 text-xl text-gray-700 sm:mt-4">
+          <p className="mt-3 text-lg sm:text-xl text-gray-700 sm:mt-4">
             Discover the easiest way to stay on top of your daily tasks and
             long-term goals. ToDoze is designed to help you organize,
             prioritize, and accomplish what matters most.
           </p>
-          <div className="mt-8 space-y-4">
-            <div>
-              <Button
-                className=" flex items-center mx-auto  bg-blue-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-blue-700 transition transform hover:scale-105"
-                width="w-fit"
-              >
-                <Link to="/register" className="flex items-center">
-                  Get Started
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
         </div>
-        <div className="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full max-w-6xl">
           {[
             {
               icon: "✨",
@@ -56,7 +49,10 @@ function WelcomePage() {
             },
           ].map((feature, index) => (
             <div key={index} className="flex flex-col items-center text-center">
-              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white text-2xl">
+              <div
+                className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white text-2xl"
+                aria-hidden="true"
+              >
                 {feature.icon}
               </div>
               <h2 className="mt-4 text-lg font-medium text-gray-900">
@@ -77,5 +73,3 @@ function WelcomePage() {
     </div>
   );
 }
-
-export default WelcomePage;

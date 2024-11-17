@@ -10,11 +10,10 @@ import WelcomePage from "../pages/WelcomePage";
 import About from "../pages/About";
 import ProtectedRoutes from "../components/auth/ProtectedRoutes";
 
+//** get user data from local storage
 const storageKey = "logedinUser";
 const userDataString = localStorage.getItem(storageKey);
 const userData = userDataString ? JSON.parse(userDataString) : null;
-
-console.log(userData);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,7 +54,18 @@ const router = createBrowserRouter(
           </ProtectedRoutes>
         }
       />
-      <Route path="register" element={<SignUp />} />
+      <Route
+        path="register"
+        element={
+          <ProtectedRoutes
+            isAllowed={!userData}
+            redirectPath="/"
+            data={userData}
+          >
+            <SignUp />
+          </ProtectedRoutes>
+        }
+      />
     </Route>
   )
 );

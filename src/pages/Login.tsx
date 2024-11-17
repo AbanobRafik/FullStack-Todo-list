@@ -29,13 +29,14 @@ const Login = () => {
   const onSubmit: SubmitHandler<formField> = async (data) => {
     setIsLoading(true);
     try {
+      //** here we make data : userData to get the jwt
       const { status, data: userData } = await axiosInstance.post(
         "/auth/local",
         data
       );
       if (status === 200) {
         toast.success(
-          "You login successfully, You will navigate to homepage after 4 seconds",
+          "You login successfully, You will navigate to homepage after 2 seconds",
           {
             duration: 2000,
             position: "top-center",
@@ -43,8 +44,9 @@ const Login = () => {
             icon: "👏",
           }
         );
-        localStorage.setItem("logedinUser", JSON.stringify(userData));
 
+        //** store user jwt in local storage
+        localStorage.setItem("logedinUser", JSON.stringify(userData));
         setTimeout(() => {
           location.replace("/")
         }, 2000);

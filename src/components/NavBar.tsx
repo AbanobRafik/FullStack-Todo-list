@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { NavLink } from "react-router-dom";
 
 export default function Component() {
@@ -6,6 +7,27 @@ export default function Component() {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const storageKey = "logedinUser";
+  const userDataString = localStorage.getItem(storageKey);
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  const logOut = () => {
+    localStorage.removeItem(storageKey);
+    toast.success(
+      "You Logout successfully",
+      {
+        duration: 2000,
+        position: "top-center",
+        style: { backgroundColor: "green", color: "white" },
+        icon: "👋",
+      }
+    );
+
+    setTimeout(() => {
+      location.replace("/login");
+    }, 1500);
   };
 
   return (
@@ -49,22 +71,35 @@ export default function Component() {
 
             {/* Login and Register links */}
             <ul className="flex items-center gap-6">
-              <li>
-                <NavLink
-                  to="/login"
-                  className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
-                >
-                  Login
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/register"
-                  className="text-indigo-600 bg-white hover:bg-indigo-100 font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
-                >
-                  Sign Up
-                </NavLink>
-              </li>
+              {userData ? (
+                <li>
+                  <button
+                    className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
+                    onClick={logOut}
+                  >
+                    Logout
+                  </button>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <NavLink
+                      to="/login"
+                      className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
+                    >
+                      Login
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/register"
+                      className="text-indigo-600 bg-white hover:bg-indigo-100 font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
+                    >
+                      Sign Up
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
 
@@ -146,18 +181,31 @@ export default function Component() {
           </div>
           {/* Login and Register links */}
           <div className="mt-auto flex justify-between items-center p-2">
-            <NavLink
-              to="/login"
-              className="text-white hover:text-indigo-200 p-2 rounded-md text-base font-medium"
-            >
-              Login
-            </NavLink>
-            <NavLink
-              to="/register"
-              className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
-            >
-              Sign Up
-            </NavLink>
+            {userData ? (
+              <button
+                className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
+                onClick={logOut}
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <NavLink
+                  to="/login"
+                  className="text-white hover:text-indigo-200 p-2 rounded-md text-base font-medium"
+                  onClick={() => setIsMenuOpen(false)} // Close menu if open
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/register"
+                  className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
+                  onClick={() => setIsMenuOpen(false)} // Close menu if open
+                >
+                  Sign Up
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       </div>
