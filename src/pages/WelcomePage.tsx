@@ -1,11 +1,7 @@
 import { CheckCircle } from "lucide-react";
+import { userData } from "../UserData";
 
 export default function WelcomePage() {
-  const storageKey = "logedinUser";
-  const userDataString =
-    typeof window !== "undefined" ? localStorage.getItem(storageKey) : null;
-  const userData = userDataString ? JSON.parse(userDataString) : null;
-
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
       <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
@@ -17,7 +13,7 @@ export default function WelcomePage() {
             />
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-blue-700">
-            Welcome {userData?.user?.username || "User"}👋
+            Welcome {userData?.user?.username}👋
           </h1>
           <p className="mt-3 text-lg sm:text-xl text-gray-700 sm:mt-4">
             Discover the easiest way to stay on top of your daily tasks and

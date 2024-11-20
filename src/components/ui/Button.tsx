@@ -13,11 +13,12 @@ const Button = ({
   className = "",
   children,
   isLoading = false,
+
   ...rest
 }: ButtonProps) => {
   return (
     <button
-      className={`${className} ${width} p-3 rounded-md text-white mt-1 flex items-center justify-center`}
+      className={`${className} ${width}  $ p-3 rounded-md text-white mt-1 flex items-center justify-center`}
       {...rest}
       disabled={isLoading}
     >

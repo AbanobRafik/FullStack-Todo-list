@@ -15,15 +15,12 @@ export default function Component() {
 
   const logOut = () => {
     localStorage.removeItem(storageKey);
-    toast.success(
-      "You Logout successfully",
-      {
-        duration: 2000,
-        position: "top-center",
-        style: { backgroundColor: "green", color: "white" },
-        icon: "👋",
-      }
-    );
+    toast.success("You Logout successfully", {
+      duration: 2000,
+      position: "top-center",
+      style: { backgroundColor: "green", color: "white" },
+      icon: "👋",
+    });
 
     setTimeout(() => {
       location.replace("/login");
@@ -70,35 +67,42 @@ export default function Component() {
             </ul>
 
             {/* Login and Register links */}
-            <ul className="flex items-center gap-6">
+            <ul>
               {userData ? (
                 <li>
-                  <button
-                    className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
-                    onClick={logOut}
-                  >
-                    Logout
-                  </button>
+                  <div className="flex items-center gap-5">
+                    <NavLink
+                      to="/profile"
+                      className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
+                    >
+                      Profile
+                    </NavLink>
+                    <button
+                      className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
+                      onClick={logOut}
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </li>
               ) : (
-                <>
-                  <li>
+                <li>
+                  <div className="flex items-center gap-5">
                     <NavLink
                       to="/login"
                       className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
                     >
                       Login
                     </NavLink>
-                  </li>
-                  <li>
+
                     <NavLink
                       to="/register"
                       className="text-indigo-600 bg-white hover:bg-indigo-100 font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
                     >
                       Sign Up
                     </NavLink>
-                  </li>
-                </>
+                  </div>
+                </li>
               )}
             </ul>
           </div>
@@ -179,15 +183,25 @@ export default function Component() {
               Todos
             </NavLink>
           </div>
-          {/* Login and Register links */}
-          <div className="mt-auto flex justify-between items-center p-2">
+
+          <div className="mt-auto flex justify-between  items-center p-2">
             {userData ? (
-              <button
-                className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
-                onClick={logOut}
-              >
-                Logout
-              </button>
+              <div className="flex items-center justify-between w-full">
+                <NavLink
+                  to="/profile"
+                  className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
+                >
+                  Profile
+                </NavLink>
+                <div>
+                  <button
+                    className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
+                    onClick={logOut}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
             ) : (
               <>
                 <NavLink

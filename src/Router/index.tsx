@@ -9,6 +9,7 @@ import SignUp from "../pages/SignUp";
 import WelcomePage from "../pages/WelcomePage";
 import About from "../pages/About";
 import ProtectedRoutes from "../components/auth/ProtectedRoutes";
+import Todos from "../pages/Todos";
 
 //** get user data from local storage
 const storageKey = "logedinUser";
@@ -43,6 +44,18 @@ const router = createBrowserRouter(
         }
       />
       <Route
+        path="todos"
+        element={
+          <ProtectedRoutes
+            isAllowed={userData}
+            redirectPath="/login"
+            data={userData}
+          >
+            <Todos />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
         path="login"
         element={
           <ProtectedRoutes
@@ -63,6 +76,18 @@ const router = createBrowserRouter(
             data={userData}
           >
             <SignUp />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="profile"
+        element={
+          <ProtectedRoutes
+            isAllowed={userData}
+            redirectPath="/"
+            data={userData}
+          >
+            <p>profile</p>
           </ProtectedRoutes>
         }
       />
