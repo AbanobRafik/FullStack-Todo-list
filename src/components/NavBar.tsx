@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { NavLink } from "react-router-dom";
+import Logo from "./ui/Logo";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,13 +34,13 @@ export default function Component() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h2 className="text-2xl font-bold text-white">ToDoze</h2>
+            <Logo />
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:justify-between md:flex-1">
             {/* Main navigation links */}
-            <ul className="flex gap-10 justify-center flex-1">
+            <ul className="flex gap-10 justify-evenly text-lg flex-1">
               <li>
                 <NavLink
                   to="/"

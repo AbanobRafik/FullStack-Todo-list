@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 export default function About() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -125,7 +127,7 @@ export default function About() {
             </p>
             <div className="flex justify-center">
               <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
-                Get Started for Free
+                <NavLink to="/todos">Get Started for Free</NavLink>
               </button>
             </div>
           </div>
