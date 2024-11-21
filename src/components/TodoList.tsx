@@ -1,38 +1,29 @@
 import { CheckCircle, Edit, Trash2 } from "lucide-react";
 import Button from "./ui/Button";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../config/axios.config";
 import { userData } from "../UserData";
+import { NoTodos } from "./NoTodos";
 
-export default function TodoList() {
-  const [todos, setTodos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+function TodoList() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["todos"],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get("/users/me?populate=todos", {
+        headers: {
+          Authorization: `Bearer ${userData.jwt}`,
+        },
+      });
+      return data;
+    },
+  });
 
-  useEffect(() => {
-    try {
-      axiosInstance
-        .get("/users/me?populate=todos", {
-          headers: {
-            Authorization: `Bearer ${userData.jwt}`,
-          },
-        })
-        .then((res) => {
-          setTodos(res.data.todos);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-  if (isLoading) return <h3>loading ...</h3>;
+  if (isLoading) return "Loading...";
+
   return (
     <div className="space-y-5 p-8">
-      {todos.length ? (
-        todos.map((todo) => (
+      {data.todos.length ? (
+        data.todos.map((todo) => (
           <div
             key={todo.id}
             className="bg-gray-100 shadow-md rounded-lg overflow-hidden"
@@ -58,8 +49,10 @@ export default function TodoList() {
           </div>
         ))
       ) : (
-        <h3>No todos yet</h3>
+        <NoTodos />
       )}
     </div>
   );
 }
+
+export default TodoList;

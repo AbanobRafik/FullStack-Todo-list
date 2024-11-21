@@ -10,6 +10,7 @@ import WelcomePage from "../pages/WelcomePage";
 import About from "../pages/About";
 import ProtectedRoutes from "../components/auth/ProtectedRoutes";
 import Todos from "../pages/Todos";
+import ErrorPage from "../components/errors/ErrorPage";
 
 //** get user data from local storage
 const storageKey = "logedinUser";
@@ -18,7 +19,7 @@ const userData = userDataString ? JSON.parse(userDataString) : null;
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Root />}>
+    <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
       <Route
         index
         element={
@@ -91,6 +92,7 @@ const router = createBrowserRouter(
           </ProtectedRoutes>
         }
       />
+      <Route path="*" element={<ErrorPage />} />
     </Route>
   )
 );
