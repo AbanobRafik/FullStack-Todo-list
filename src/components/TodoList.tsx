@@ -1,20 +1,18 @@
 import { CheckCircle, Edit, Trash2 } from "lucide-react";
 import Button from "./ui/Button";
-import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "../config/axios.config";
-import { userData } from "../UserData";
 import { NoTodos } from "./NoTodos";
+import { ITodo } from "../interfaces";
+import useAuthenticatedQuery from "./hooks/useAuthenticatedQuery";
+import { userData } from "../UserData";
 
 function TodoList() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useAuthenticatedQuery({
     queryKey: ["todos"],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get("/users/me?populate=todos", {
-        headers: {
-          Authorization: `Bearer ${userData.jwt}`,
-        },
-      });
-      return data;
+    apiUrl: "/users/me?populate=todos",
+    config: {
+      headers: {
+        Authorization: `Bearer ${userData.jwt}`,
+      },
     },
   });
 
@@ -23,7 +21,7 @@ function TodoList() {
   return (
     <div className="space-y-5 p-8">
       {data.todos.length ? (
-        data.todos.map((todo) => (
+        data.todos.map((todo: ITodo) => (
           <div
             key={todo.id}
             className="bg-gray-100 shadow-md rounded-lg overflow-hidden"

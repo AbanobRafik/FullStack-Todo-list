@@ -32,6 +32,12 @@ export interface Ilogin {
   };
 }
 
+export interface ITodo {
+  id?: number;
+  title: string;
+  description?: string;
+}
+
 export interface IerrorResponse {
   error: {
     message?: string;
