@@ -12,6 +12,7 @@ import ProtectedRoutes from "../components/auth/ProtectedRoutes";
 import Todos from "../pages/TodosList";
 import ErrorPage from "../components/errors/ErrorPage";
 import TodosPage from "../pages/TodosPage";
+import Profile from "../pages/Profile";
 
 //** get user data from local storage
 const storageKey = "logedinUser";
@@ -101,7 +102,7 @@ const router = createBrowserRouter(
             redirectPath="/"
             data={userData}
           >
-            <p>profile</p>
+            <Profile />
           </ProtectedRoutes>
         }
       />

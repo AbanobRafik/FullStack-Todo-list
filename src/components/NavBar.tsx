@@ -193,13 +193,21 @@ export default function Component() {
 
           <div className="mt-auto flex justify-between  items-center p-2">
             {userData ? (
-              <div className="flex items-center justify-between w-full">
-                <NavLink
-                  to="/profile"
-                  className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
-                >
-                  Profile
-                </NavLink>
+              <div className="flex items-center justify-between   w-full">
+                <div className="flex gap-4">
+                  <NavLink
+                    to="/profile"
+                    className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
+                  >
+                    Profile
+                  </NavLink>
+                  <NavLink
+                    to="/TodosPage"
+                    className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
+                  >
+                    Todos
+                  </NavLink>
+                </div>
                 <div>
                   <button
                     className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
