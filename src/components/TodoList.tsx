@@ -148,6 +148,7 @@ function TodoList() {
         }
       );
       if (status === 204) {
+        await refetch();
         oncloseDeleteModal();
       }
     } catch (error) {
@@ -177,7 +178,7 @@ function TodoList() {
         </Button>
       </div>
       {data.todos.length ? (
-        data.todos.map((todo: ITodo) => (
+        [...data.todos].reverse().map((todo: ITodo) => (
           <div
             key={todo.id}
             className="bg-gray-100 shadow-md rounded-lg overflow-hidden"
