@@ -73,12 +73,6 @@ export default function Component() {
                 <li>
                   <div className="flex items-center gap-5">
                     <NavLink
-                      to="/profile"
-                      className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
-                    >
-                      Profile
-                    </NavLink>
-                    <NavLink
                       to="/TodosPage"
                       className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
                     >
@@ -195,12 +189,6 @@ export default function Component() {
             {userData ? (
               <div className="flex items-center justify-between   w-full">
                 <div className="flex gap-4">
-                  <NavLink
-                    to="/profile"
-                    className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
-                  >
-                    Profile
-                  </NavLink>
                   <NavLink
                     to="/TodosPage"
                     className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"

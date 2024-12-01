@@ -12,7 +12,6 @@ import ProtectedRoutes from "../components/auth/ProtectedRoutes";
 import Todos from "../pages/TodosList";
 import ErrorPage from "../components/errors/ErrorPage";
 import TodosPage from "../pages/TodosPage";
-import Profile from "../pages/Profile";
 
 //** get user data from local storage
 const storageKey = "logedinUser";
@@ -91,18 +90,6 @@ const router = createBrowserRouter(
             data={userData}
           >
             <SignUp />
-          </ProtectedRoutes>
-        }
-      />
-      <Route
-        path="profile"
-        element={
-          <ProtectedRoutes
-            isAllowed={userData}
-            redirectPath="/"
-            data={userData}
-          >
-            <Profile />
           </ProtectedRoutes>
         }
       />

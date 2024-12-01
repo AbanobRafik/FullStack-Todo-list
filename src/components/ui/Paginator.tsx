@@ -8,7 +8,7 @@ interface IProps {
 }
 
 const Paginator = ({
-  page = 1,
+  page,
   pageCount,
   onClickPrev,
   isLoading,
@@ -18,10 +18,10 @@ const Paginator = ({
   return (
     <div className="flex justify-center items-center flex-col gap-3">
       <p className="text-sm text-gray-600 mx-3">
-        Page{" "}
+        Page
         <span className="mx-1 font-semibold text-gray-900 text-md-1">
           {page}
-        </span>{" "}
+        </span>
         to
         <span className="mx-1 font-smeibold text-gray-900">{pageCount}</span> of
         <span className="mx-1 font-semibold text-gray-900">{total}</span>{" "}
