@@ -2,17 +2,33 @@ import { CheckCircle, Edit, Trash2 } from "lucide-react";
 import Button from "./ui/Button";
 import { NoTodos } from "./NoTodos";
 import { ITodo } from "../interfaces";
-import useAuthenticatedQuery from "./hooks/useAuthenticatedQuery";
 import { userData } from "../UserData";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useState } from "react";
 import Modal from "./ui/Modal";
 import Input from "./ui/Input";
-import TextArea from "./ui/Testarea";
 import axiosInstance from "../config/axios.config";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { todoSchema, TodoSchemaType } from "./validation";
+import TextArea from "./ui/Testarea";
+import TodoSkeleton from "./TodoSkeleton";
+import useCustomeQuery from "./hooks/useCustomeQuery";
 
 function TodoList() {
-  const { data, isLoading } = useAuthenticatedQuery({
-    queryKey: ["todos"],
+  // States
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isToAdd, setIsToAdd] = useState(false);
+  const [todoToEdit, setTodoToEdit] = useState<ITodo>({
+    id: 0,
+    documentId: "",
+    title: "",
+    description: "",
+  });
+
+  const { data, isLoading, refetch } = useCustomeQuery({
+    queryKey: ["TodoList"],
     apiUrl: "/users/me?populate=todos",
     config: {
       headers: {
@@ -21,47 +37,57 @@ function TodoList() {
     },
   });
 
-  // states
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [todoToEdit, setTodoToEdit] = useState<ITodo>({
-    id: 0,
-    documentId: "",
-    title: "",
-    description: "",
+  // React Hook Form Setup with Zod Validation
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset, // <-- added reset
+  } = useForm<TodoSchemaType>({
+    resolver: zodResolver(todoSchema),
   });
 
-  // hadlres
+  // Handlers
+  const onOpenEditModal = (todo: ITodo) => {
+    setTodoToEdit(todo);
+    reset({ title: todo.title, description: todo.description }); // <-- reset form with new values
+    setIsEditModalOpen(true);
+  };
+
   const onCloseEditModal = () => {
     setTodoToEdit({ id: 0, title: "", description: "" });
     setIsEditModalOpen(false);
   };
-  const onOpenEditModal = (todo: ITodo) => {
+
+  const onOpenDeleteModal = (todo: ITodo) => {
     setTodoToEdit(todo);
-    setIsEditModalOpen(true);
+    setIsOpenDeleteModal(true);
   };
 
-  // for edit the todo
-  const onChangeHanler = (
-    evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = evt.target;
-    setTodoToEdit({
-      ...todoToEdit,
-      [name]: value,
-    });
+  const oncloseDeleteModal = () => {
+    setTodoToEdit({ id: 0, title: "", description: "" });
+    setIsOpenDeleteModal(false);
   };
 
-  // for submit the edit todo
-  const onSubmitHandler = async (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    const { title, description } = todoToEdit;
+  const onOpenAddModal = () => {
+    setIsToAdd(true);
+    reset({ title: "", description: "" });
+  };
+  const onCloseAddModal = () => {
+    reset({ title: "", description: "" });
+    setIsToAdd(false);
+  };
+
+  const onSubmitHandlerToAdd = async (data: TodoSchemaType) => {
+    setIsUpdating(true);
     try {
-      const response = await axiosInstance.put(
-        `/todos/${todoToEdit.documentId}`,
+      const { status } = await axiosInstance.post(
+        "/todos",
         {
           data: {
-            title,
-            description,
+            title: data.title,
+            description: data.description,
+            user: [userData.user.id],
           },
         },
         {
@@ -70,16 +96,86 @@ function TodoList() {
           },
         }
       );
-      console.log(response);
+      if (status === 201) {
+        await refetch();
+        onCloseAddModal();
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
-  if (isLoading) return "Loading...";
+  // Submit Handler for edit with Validation
+  const onSubmitHandlerToEdit = async (data: TodoSchemaType) => {
+    setIsUpdating(true);
+    try {
+      const { status } = await axiosInstance.put(
+        `/todos/${todoToEdit.documentId}`,
+        {
+          data: {
+            title: data.title,
+            description: data.description,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData.jwt}`,
+          },
+        }
+      );
+      if (status === 200) {
+        onCloseEditModal();
+        await refetch();
+      }
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const onDeleteHandler = async () => {
+    setIsUpdating(true);
+    try {
+      const { status } = await axiosInstance.delete(
+        `/todos/${todoToEdit.documentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userData.jwt}`,
+          },
+        }
+      );
+      if (status === 204) {
+        oncloseDeleteModal();
+      }
+    } catch (error) {
+      console.error("error", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  if (isLoading)
+    return (
+      <>
+        <TodoSkeleton />
+      </>
+    );
 
   return (
     <div className="space-y-5 p-8">
+      <div className="flex justify-center items-center">
+        <Button
+          width="w-fit"
+          isLoading={isUpdating}
+          onClick={onOpenAddModal}
+          className="bg-cyan-500 hover:bg-cyan-800 duration-300 ease-out"
+        >
+          Post New Todo
+        </Button>
+      </div>
       {data.todos.length ? (
         data.todos.map((todo: ITodo) => (
           <div
@@ -87,7 +183,7 @@ function TodoList() {
             className="bg-gray-100 shadow-md rounded-lg overflow-hidden"
           >
             <div className="md:p-6 p-2 flex items-center justify-between hover:bg-gray-200 transition-colors duration-200">
-              <div className="flex items-center space-x-2 md:space-x-4 ">
+              <div className="flex items-center space-x-2 md:space-x-4">
                 <CheckCircle className="text-green-500 md:h-6 md:w-6 h-5 w-5" />
                 <p className="md:text-lg text-sm font-semibold text-gray-800">
                   {todo.title}
@@ -101,7 +197,10 @@ function TodoList() {
                   <Edit className="w-2 h-2 md:w-4 md:h-4" />
                   <span>Edit</span>
                 </Button>
-                <Button className="flex items-center md:space-x-2 md:px-4 md:py-2 space-x-1 px-2 py-1 text-sm font-medium bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
+                <Button
+                  onClick={() => onOpenDeleteModal(todo)}
+                  className="flex items-center md:space-x-2 md:px-4 md:py-2 space-x-1 px-2 py-1 text-sm font-medium bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300 ease-in-out"
+                >
                   <Trash2 className="w-2 h-2 md:w-4 md:h-4" />
                   <span>Delete</span>
                 </Button>
@@ -111,44 +210,112 @@ function TodoList() {
         ))
       ) : (
         <NoTodos
-          boldMsg="NoTodos"
-          msg="You haven't added any
-        todos yet. Start by adding a new task!"
+          boldMsg="No Todos"
+          msg="You haven't added any todos yet. Start by adding a new task!"
         />
       )}
 
-      <Modal
-        isOpen={isEditModalOpen}
-        close={onCloseEditModal}
-        title="Edit Todo"
-      >
-        <form className="flex flex-col" onSubmit={onSubmitHandler}>
-          <Input
-            value={todoToEdit.title}
-            className=" mb-3 "
-            onChange={onChangeHanler}
-            name="title"
-          />
+      {/* add todo modal */}
+      <Modal isOpen={isToAdd} close={onCloseAddModal} title="Add a New Todo">
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={handleSubmit(onSubmitHandlerToAdd)}
+        >
+          <Input placeholder="Title" {...register("title")} />
+          {errors.title && (
+            <p className="text-red-500 text-sm mb-2">{errors.title.message}</p>
+          )}
+
+          {/* Description Textarea */}
           <TextArea
-            placeholder="description..."
+            placeholder="Description..."
             rows={6}
-            value={todoToEdit.description}
-            onChange={onChangeHanler}
-            name="description"
+            {...register("description")} // Ensure correct registration here
           />
 
           <div className="flex gap-5 mt-5 p-2">
-            <Button className="bg-emerald-500 hover:bg-emerald-800 duration-300 text-white">
-              Update
+            <Button
+              type="submit"
+              className="bg-emerald-500 hover:bg-emerald-800 duration-300 text-white"
+              isLoading={isUpdating}
+            >
+              Add
             </Button>
             <Button
-              onClick={onCloseEditModal}
+              onClick={onCloseAddModal}
               className="bg-red-500 hover:bg-red-800 duration-300 text-white"
+              type="button"
             >
               Cancel
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Edit Todo Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        close={onCloseEditModal}
+        title="Edit Todo"
+      >
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={handleSubmit(onSubmitHandlerToEdit)}
+        >
+          <Input placeholder="Title" {...register("title")} />
+          {errors.title && (
+            <p className="text-red-500 text-sm mb-2">{errors.title.message}</p>
+          )}
+
+          {/* Description Textarea */}
+          <TextArea
+            placeholder="Description..."
+            rows={6}
+            {...register("description")} // Ensure correct registration here
+          />
+
+          <div className="flex gap-5 mt-5 p-2">
+            <Button
+              type="submit"
+              className="bg-emerald-500 hover:bg-emerald-800 duration-300 text-white"
+              isLoading={isUpdating}
+            >
+              Update
+            </Button>
+            <Button
+              onClick={onCloseEditModal}
+              className="bg-red-500 hover:bg-red-800 duration-300 text-white"
+              type="button"
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Delete Todo Modal */}
+      <Modal
+        isOpen={isOpenDeleteModal}
+        close={oncloseDeleteModal}
+        title="Are you sure you want to delete this todo?"
+        description="Deleting this todo will remove it permanently and you won't be able to recover it."
+      >
+        <div className="flex gap-4">
+          <Button
+            onClick={onDeleteHandler}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition duration-300"
+            isLoading={isUpdating}
+          >
+            Delete
+          </Button>
+          <Button
+            onClick={oncloseDeleteModal}
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md transition duration-300"
+            type="button"
+          >
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </div>
   );

@@ -6,6 +6,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children: ReactNode;
   isLoading?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const Button = ({
@@ -13,11 +14,12 @@ const Button = ({
   className = "",
   children,
   isLoading = false,
-
+  type,
   ...rest
 }: ButtonProps) => {
   return (
     <button
+      type={type}
       className={`${className} ${width}  $ p-3 rounded-md text-white mt-1 flex items-center justify-center`}
       {...rest}
       disabled={isLoading}

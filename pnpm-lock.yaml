@@ -11,6 +11,9 @@ importers:
       '@headlessui/react':
         specifier: ^2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@hookform/resolvers':
+        specifier: ^3.9.1
+        version: 3.9.1(react-hook-form@7.53.2(react@18.3.1))
       '@tanstack/react-query':
         specifier: ^5.61.0
         version: 5.61.0(react@18.3.1)
@@ -20,6 +23,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      install:
+        specifier: ^0.13.0
+        version: 0.13.0
       lucide-react:
         specifier: ^0.456.0
         version: 0.456.0(react@18.3.1)
@@ -38,6 +44,9 @@ importers:
       react-router-dom:
         specifier: ^7.0.1
         version: 7.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@eslint/js':
         specifier: ^9.13.0
@@ -373,6 +382,11 @@ packages:
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
+
+  '@hookform/resolvers@3.9.1':
+    resolution: {integrity: sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1031,6 +1045,10 @@ packages:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
 
+  install@0.13.0:
+    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
+    engines: {node: '>= 0.10'}
+
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
@@ -1556,6 +1574,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -1816,6 +1837,10 @@ snapshots:
       '@tanstack/react-virtual': 3.10.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  '@hookform/resolvers@3.9.1(react-hook-form@7.53.2(react@18.3.1))':
+    dependencies:
+      react-hook-form: 7.53.2(react@18.3.1)
 
   '@humanfs/core@0.19.1': {}
 
@@ -2489,6 +2514,8 @@ snapshots:
 
   imurmurhash@0.1.4: {}
 
+  install@0.13.0: {}
+
   is-binary-path@2.1.0:
     dependencies:
       binary-extensions: 2.3.0
@@ -2957,3 +2984,5 @@ snapshots:
   yaml@2.6.0: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@3.23.8: {}
