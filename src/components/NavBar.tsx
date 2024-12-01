@@ -40,7 +40,7 @@ export default function Component() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:justify-between md:flex-1">
             {/* Main navigation links */}
-            <ul className="flex gap-10 justify-evenly text-lg flex-1">
+            <ul className="flex justify-evenly text-lg flex-1">
               <li>
                 <NavLink
                   to="/"
@@ -59,10 +59,10 @@ export default function Component() {
               </li>
               <li>
                 <NavLink
-                  to="/todos"
+                  to="/todoList"
                   className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
                 >
-                  Todos
+                  todoList
                 </NavLink>
               </li>
             </ul>
@@ -77,6 +77,12 @@ export default function Component() {
                       className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
                     >
                       Profile
+                    </NavLink>
+                    <NavLink
+                      to="/TodosPage"
+                      className="text-white hover:text-indigo-200 font-semibold transition duration-300 ease-in-out"
+                    >
+                      todos
                     </NavLink>
                     <button
                       className="text-indigo-600 bg-white hover:bg-indigo-100 px-4 py-2 rounded-lg shadow-md text-base font-medium"
@@ -178,10 +184,10 @@ export default function Component() {
               About
             </NavLink>
             <NavLink
-              to="/todos"
+              to="/todoList"
               className="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-lg font-medium"
             >
-              Todos
+              todoList
             </NavLink>
           </div>
 

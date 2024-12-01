@@ -160,19 +160,21 @@ function TodoList() {
 
   if (isLoading)
     return (
-      <>
-        <TodoSkeleton />
-      </>
+      <div>
+        {Array.from({ length: 3 }, (_, idx) => (
+          <TodoSkeleton key={idx} />
+        ))}
+      </div>
     );
 
   return (
     <div className="space-y-5 p-8">
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center gap-5">
         <Button
           width="w-fit"
           isLoading={isUpdating}
           onClick={onOpenAddModal}
-          className="bg-cyan-500 hover:bg-cyan-800 duration-300 ease-out"
+          className="bg-cyan-500 hover:bg-cyan-800 duration-300 border-2 border-cyan-500 hover:border-cyan-800 ease-out"
         >
           Post New Todo
         </Button>
