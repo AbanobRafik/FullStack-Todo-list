@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:1337/api",
+  baseURL: "https://delightful-morning-f3a21cbd39.strapiapp.com/api",
   timeout: 5000,
 });
 
